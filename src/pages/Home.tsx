@@ -1,8 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Music, MapPin, Mic2, ArrowRight, PlayCircle } from 'lucide-react';
-import { ViewName } from '../config/types';
 
-const HomePage = ({ onNavigate }: { onNavigate: (v: ViewName) => void }) => {
+const HomePage = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Hero Header - Título movido para baixo da imagem */}
@@ -41,8 +41,8 @@ const HomePage = ({ onNavigate }: { onNavigate: (v: ViewName) => void }) => {
 
       {/* Feature Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-        <div 
-          onClick={() => onNavigate('plans')}
+        <Link 
+          to="/planos"
           className="group cursor-pointer bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-brand-primary/20 hover:-translate-y-1 transition-all duration-300"
         >
           <div className="w-16 h-16 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:bg-brand-primary transition-colors">
@@ -51,10 +51,10 @@ const HomePage = ({ onNavigate }: { onNavigate: (v: ViewName) => void }) => {
           <h3 className="text-2xl font-display font-bold text-slate-800 mb-2 group-hover:text-brand-primary transition-colors">Cursos & Planos</h3>
           <p className="text-slate-500 mb-6 leading-relaxed">Conheça nossos planos Class, Gold, Shine e Master Class e evolua sua técnica.</p>
           <span className="text-brand-primary font-bold flex items-center text-sm uppercase tracking-wide">Ver Planos <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
-        </div>
+        </Link>
 
-        <div 
-           onClick={() => onNavigate('studios')}
+        <Link 
+           to="/studios"
            className="group cursor-pointer bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-brand-accent/20 hover:-translate-y-1 transition-all duration-300"
         >
           <div className="w-16 h-16 rounded-2xl bg-brand-accent/10 flex items-center justify-center mb-6 group-hover:bg-brand-accent transition-colors">
@@ -63,10 +63,10 @@ const HomePage = ({ onNavigate }: { onNavigate: (v: ViewName) => void }) => {
           <h3 className="text-2xl font-display font-bold text-slate-800 mb-2 group-hover:text-brand-accent transition-colors">Nossas Unidades</h3>
           <p className="text-slate-500 mb-6 leading-relaxed">Estamos presentes em Arceburgo, Guaranésia, Guaxupé e Juruaia.</p>
            <span className="text-brand-accent font-bold flex items-center text-sm uppercase tracking-wide">Ver Endereços <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
-        </div>
+        </Link>
 
-        <div 
-           onClick={() => onNavigate('team')}
+        <Link 
+           to="/professores"
            className="group cursor-pointer bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-brand-purple/20 hover:-translate-y-1 transition-all duration-300"
         >
           <div className="w-16 h-16 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6 group-hover:bg-brand-purple transition-colors">
@@ -75,7 +75,7 @@ const HomePage = ({ onNavigate }: { onNavigate: (v: ViewName) => void }) => {
           <h3 className="text-2xl font-display font-bold text-slate-800 mb-2 group-hover:text-brand-purple transition-colors">Professores</h3>
           <p className="text-slate-500 mb-6 leading-relaxed">Conheça a equipe de mestres que vai transformar sua musicalidade.</p>
           <span className="text-brand-purple font-bold flex items-center text-sm uppercase tracking-wide">Conhecer Equipe <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
-        </div>
+        </Link>
       </div>
 
       {/* FAQ CTA */}
@@ -85,12 +85,12 @@ const HomePage = ({ onNavigate }: { onNavigate: (v: ViewName) => void }) => {
           <h3 className="text-2xl font-display font-bold mb-2">Dúvidas sobre o funcionamento?</h3>
           <p className="text-slate-200">Confira nossa seção de Perguntas Frequentes e entenda nossa metodologia.</p>
         </div>
-        <button 
-          onClick={() => onNavigate('faq')}
+        <Link 
+          to="/faq"
           className="px-8 py-4 bg-white text-brand-soar font-bold rounded-xl shadow-lg hover:bg-brand-primary hover:text-white transition-all transform hover:-translate-y-1 whitespace-nowrap relative z-10"
         >
           Ir para FAQ
-        </button>
+        </Link>
       </div>
     </div>
   );
