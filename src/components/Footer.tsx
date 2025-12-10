@@ -1,13 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Phone, MapPin, Info, Instagram, Youtube, Facebook } from 'lucide-react';
-import { ViewName } from '../config/types';
 import { CONTACT_CONFIG } from '../config/constants';
 
-interface FooterProps {
-  onNavigate: (view: ViewName) => void;
-}
-
-const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+const Footer: React.FC = () => {
   return (
     <footer className="bg-black py-16 border-t border-brand-dark/30 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,10 +27,10 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <div>
             <h4 className="text-white font-display font-bold uppercase tracking-wider mb-6 border-b border-brand-dark/50 pb-2 w-fit">Navegação</h4>
             <ul className="space-y-3 text-sm text-brand-gray">
-              <li><button onClick={() => onNavigate('plans')} className="hover:text-brand-primary hover:translate-x-1 transition-all duration-300">Cursos & Planos</button></li>
-              <li><button onClick={() => onNavigate('studios')} className="hover:text-brand-primary hover:translate-x-1 transition-all duration-300">Nossas Unidades</button></li>
-              <li><button onClick={() => onNavigate('faq')} className="hover:text-brand-primary hover:translate-x-1 transition-all duration-300">Dúvidas Frequentes</button></li>
-              <li><button onClick={() => onNavigate('team')} className="hover:text-brand-primary hover:translate-x-1 transition-all duration-300">Corpo Docente</button></li>
+              <li><Link to="/planos" className="hover:text-brand-primary hover:translate-x-1 transition-all duration-300 inline-block">Cursos & Planos</Link></li>
+              <li><Link to="/studios" className="hover:text-brand-primary hover:translate-x-1 transition-all duration-300 inline-block">Nossas Unidades</Link></li>
+              <li><Link to="/faq" className="hover:text-brand-primary hover:translate-x-1 transition-all duration-300 inline-block">Dúvidas Frequentes</Link></li>
+              <li><Link to="/professores" className="hover:text-brand-primary hover:translate-x-1 transition-all duration-300 inline-block">Corpo Docente</Link></li>
             </ul>
           </div>
 

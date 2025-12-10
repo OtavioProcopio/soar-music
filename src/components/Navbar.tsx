@@ -1,30 +1,25 @@
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Instagram, Youtube, Facebook } from 'lucide-react';
-import { ViewName } from '../config/types';
 import { CONTACT_CONFIG } from '../config/constants';
 
-interface NavbarProps {
-  currentView: ViewName;
-  onNavigate: (view: ViewName) => void;
-}
-
-const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
+const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
-  const navLinks: { name: string; view: ViewName }[] = [
-    { name: 'Home', view: 'home' },
-    { name: 'Sobre', view: 'about' },
-    { name: 'Cursos', view: 'courses' }, // Substituído Loja por Cursos
-    { name: 'Planos', view: 'plans' },
-    { name: 'Studios', view: 'studios' },
-    { name: 'Professores', view: 'team' },
-    { name: 'FAQ', view: 'faq' },
-    { name: 'Ferramentas', view: 'tools' },
-    { name: 'Contato', view: 'contact' },
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Sobre', path: '/sobre' },
+    { name: 'Cursos', path: '/cursos' },
+    { name: 'Planos', path: '/planos' },
+    { name: 'Studios', path: '/studios' },
+    { name: 'Professores', path: '/professores' },
+    { name: 'FAQ', path: '/faq' },
+    { name: 'Ferramentas', path: '/ferramentas' },
+    { name: 'Contato', path: '/contato' },
   ];
 
-  const handleNavClick = (view: ViewName) => {
-    onNavigate(view);
+  const handleNavClick = () => {
     setIsOpen(false);
     window.scrollTo(0, 0);
   };
@@ -35,7 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo Mobile */}
-            <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => handleNavClick('home')}>
+            <Link to="/" className="flex-shrink-0 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity" onClick={handleNavClick}>
                <img 
                  src="https://pdoynmsyyhdkjmivyplg.supabase.co/storage/v1/object/public/soar-site/SOAR-MUSIC-STUDIOS-LOGO-A.png" 
                  alt="Soar Music Studios" 
@@ -44,23 +39,24 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               <span className="font-display font-bold text-xl tracking-wide text-brand-soar lg:hidden">
                 SOAR
               </span>
-            </div>
+            </Link>
             
             {/* Desktop Nav */}
             <div className="hidden xl:flex flex-1 items-center justify-end">
               <div className="ml-10 flex items-baseline space-x-1">
                 {navLinks.map((link) => (
-                  <button
+                  <Link
                     key={link.name}
-                    onClick={() => handleNavClick(link.view)}
+                    to={link.path}
+                    onClick={handleNavClick}
                     className={`px-3 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
-                      currentView === link.view
+                      location.pathname === link.path
                         ? 'text-white bg-brand-primary shadow-md shadow-brand-primary/30'
                         : 'text-slate-600 hover:text-brand-primary hover:bg-slate-50'
                     }`}
                   >
                     {link.name}
-                  </button>
+                  </Link>
                 ))}
               </div>
               
@@ -96,17 +92,18 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
           <div className="xl:hidden bg-white border-b border-slate-200 shadow-xl absolute w-full z-40">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {navLinks.map((link) => (
-                <button
+                <Link
                   key={link.name}
-                  onClick={() => handleNavClick(link.view)}
+                  to={link.path}
+                  onClick={handleNavClick}
                   className={`block w-full text-left px-4 py-4 rounded-md text-base font-bold uppercase tracking-wide border-l-4 transition-all ${
-                     currentView === link.view
+                     location.pathname === link.path
                         ? 'border-brand-primary text-brand-primary bg-brand-primary/5'
                         : 'border-transparent text-slate-600 hover:text-brand-primary hover:bg-slate-50'
                   }`}
                 >
                   {link.name}
-                </button>
+                </Link>
               ))}
               <div className="p-4 border-t border-slate-100 mt-2">
                  {/* Área do aluno removida do MVP */}
