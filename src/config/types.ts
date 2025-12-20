@@ -45,11 +45,3 @@ export interface FAQItem {
   question: string;
   answer: string;
 }
-
-export interface Product {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  imageUrl: string;
-}

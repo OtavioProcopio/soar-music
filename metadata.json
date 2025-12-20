@@ -1,7 +1,0 @@
-{
-  "name": "Soar Music Studios",
-  "description": "Institutional website for Soar Music Studios featuring course plans, teacher bios, and student tools like a metronome.",
-  "requestFramePermissions": [
-    "microphone"
-  ]
-}

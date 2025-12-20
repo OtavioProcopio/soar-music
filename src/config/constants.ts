@@ -1,4 +1,4 @@
-import { Plan, Course, StudioLocation, Teacher, FAQItem, Product } from './types';
+import { Plan, Course, StudioLocation, Teacher, FAQItem } from './types';
 
 // Centralized Contact Configuration
 export const CONTACT_CONFIG = {
@@ -211,36 +211,5 @@ export const FAQS: FAQItem[] = [
     id: 'f13',
     question: 'No Plano Gold o aluno é obrigado a fazer as aulas complementares?',
     answer: 'Não. A não participação das oficinas também não altera o valor do curso.'
-  }
-];
-
-export const PRODUCTS: Product[] = [
-  {
-    id: 'p1',
-    name: 'Camiseta Oficial Soar',
-    category: 'Vestuário',
-    price: 59.90,
-    imageUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'p2',
-    name: 'Caneca Soar Music',
-    category: 'Acessórios',
-    price: 34.90,
-    imageUrl: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'p3',
-    name: 'Kit Palhetas (10un)',
-    category: 'Instrumentos',
-    price: 19.90,
-    imageUrl: 'https://images.unsplash.com/photo-1596205252650-65df6364d998?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'p4',
-    name: 'Boné Trucker Soar',
-    category: 'Vestuário',
-    price: 49.90,
-    imageUrl: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&q=80&w=800'
   }
 ];

@@ -1,134 +1,297 @@
 # SOAR Music Studios - AI Coding Agent Instructions
 
 ## Project Overview
-Music school platform with institutional website + admin/professor portals. **Currently on `site-institucional` branch** (MVP without auth). Full backend ready on `developer` branch with Supabase integration for multi-tenant school management.
+**Pure institutional website for SOAR Music Studios.** Production-ready public site showcasing courses, plans, teachers, and studios. Clean, simple architecture with zero backend dependencies. Static site optimized for performance and SEO.
 
 ## Architecture & Tech Stack
 
-### Frontend
-- **React 19.2 + TypeScript 5.8** with Vite 6.2 (dev server on port 3000)
-- **Tailwind CSS** with custom brand colors (`brand-primary: #17A6D8`, `brand-secondary: #4F6F74`)
-- **Navigation**: React Router DOM with standard routing - Use `<Link>` components and `useNavigate()` hook
-- **Lucide React** for icons, **Recharts** for charts in admin panels
+### Frontend Stack
+- **React 19.2 + TypeScript 5.8** with Vite 6.2
+- **Tailwind CSS** with custom design system
+- **React Router DOM 7.10** for client-side routing
+- **Lucide React 0.556** for icons
+- **No backend, no auth, no database** - 100% static site
 
-### Backend (Supabase - implemented but not in production)
-- **15 tables** with full RLS policies (62 total policies)
-- **3 role types**: ALUNO (student), PROFESSOR (teacher), ADMIN
-- **Edge Functions**: `webhook-pagamento`, `ativacao-manual`
-- **Storage buckets**: `soar-site` (public), `materiais`, `uploads-temporarios` (both private)
-
-## Critical Patterns & Conventions
-
-### 1. Branch Strategy (IMPORTANT)
+### Brand Colors
+```css
+--brand-primary: #17A6D8    /* Cyan */
+--brand-secondary: #4F6F74  /* Slate Gray */
+--brand-soar: #1e293b       /* Dark Blue */
 ```
-main                    ← Production deployment
-  └─ site-institucional ← CURRENT: MVP public site (no auth/backend)
-       └─ developer     ← Full features with Supabase auth/admin
+
+### Project Structure
 ```
-**Do NOT merge backend features to `site-institucional` without explicit approval.**
+soarmusic/
+├── src/
+│   ├── components/          # Layout components (4 files)
+│   │   ├── Layout.tsx      # Main wrapper with Navbar + Footer
+│   │   ├── Navbar.tsx      # Responsive navigation with mobile menu
+│   │   ├── Footer.tsx      # Footer with contact and social links
+│   │   └── HeaderBanner.tsx # Top banner with contact info
+│   ├── pages/              # Public pages (9 files)
+│   │   ├── HomePage.tsx
+│   │   ├── AboutPage.tsx
+│   │   ├── CoursesPage.tsx
+│   │   ├── PlansPage.tsx
+│   │   ├── StudiosPage.tsx
+│   │   ├── TeamPage.tsx
+│   │   ├── FAQPage.tsx
+│   │   ├── ToolsPage.tsx
+│   │   └── ContactPage.tsx
+│   ├── config/             # Configuration (2 files)
+│   │   ├── constants.ts   # All static data (single source of truth)
+│   │   └── types.ts       # TypeScript interfaces
+│   ├── App.tsx            # Router configuration
+│   ├── main.tsx           # Entry point
+│   ├── global.css         # Tailwind + custom styles
+│   └── input.css          # Tailwind directives
+├── public/                # Static assets
+├── index.html             # HTML entry point
+├── vite.config.ts         # Vite bundler config
+├── tailwind.config.js     # Tailwind config
+├── tsconfig.json          # TypeScript config
+├── postcss.config.js      # PostCSS config
+├── vercel.json            # Vercel deployment config
+└── package.json           # Dependencies
 
-### 2. Data Management
-- **Constants in `src/config/constants.ts`**: All static data (plans, teachers, studios, contact info)
-- **Centralized contact config**: Use `CONTACT_CONFIG` object - never hardcode WhatsApp/email
-- **Type definitions**: `src/config/types.ts` for frontend, `src/types/database.ts` for Supabase schemas
+Total: 18 TypeScript files | Bundle: 524KB (~120KB gzipped)
+```
 
-### 3. Component Structure
-**Public Site Components** (`src/components/`):
-- `Layout.tsx` - Wrapper with Navbar/Footer (no navigation props needed)
-- `HeaderBanner.tsx` - Top banner with contact info
-- Navigation via React Router `<Link to="/path">` components
+## Data Management
 
-**Protected Components** (developer branch):
-- `AdminLayout.tsx` / `ProfessorLayout.tsx` - Sidebar layouts with `<Outlet />`
-- `ProtectedRoute.tsx` - Guards with `requireAdmin` / `requireProfessor` props
-- `AuthContext.tsx` - Provides `user`, `isAdmin`, `isProfessor`, `isAluno`
+### Single Source of Truth: `src/config/constants.ts`
 
-### 4. Service Layer Pattern
-All Supabase operations go through service files:
-- `src/services/auth.service.ts` - Authentication only
-- `src/services/admin.service.ts` - 20+ admin CRUD methods (getDashboardStats, getAlunos, etc.)
-- `src/services/professor.service.ts` - Class/student management
-- **Never call `supabase.from()` directly in components** - always use service methods
+All site content lives here. **Never hardcode data in components.**
 
-### 5. Critical Business Logic
+```typescript
+export const CONTACT_CONFIG = {
+  whatsapp: { display: '(35) 99129-5022', link: 'https://wa.me/5535991295022' },
+  social: {
+    instagram: 'https://www.instagram.com/soarmusicstudios/',
+    facebook: 'https://www.facebook.com/soarmusicstudios',
+    youtube: 'https://www.youtube.com/@PiuGuitar'
+  },
+  email: 'pliniofagundesdefaria@gmail.com'
+};
 
-#### Automatic Slot Management
-Planos (plans) have `vagas_max` / `vagas_ocupadas`. Triggers auto-increment/decrement on assinatura (subscription) status changes. **Never manually update vagas** - let triggers handle it.
+export const PLANS: Plan[] = [...];      // 4 course plans
+export const COURSES: Course[] = [...];  // Musical instruments
+export const TEACHERS: Teacher[] = [...]; // Professor profiles
+export const STUDIOS: StudioLocation[] = [...]; // Physical locations
+export const FAQS: FAQItem[] = [...];    // Frequently asked questions
+```
 
-#### Fixed Schedule System
-- **Professor assigns schedule to student** (not student-selected)
-- `grade_aluno` table defines weekly fixed schedule
-- `agendamentos` table tracks actual class sessions
+### Type Definitions: `src/config/types.ts`
 
-#### Content Visibility
-Three levels: `PUBLICO` (all), `PLANO` (plan subscribers), `ALUNO` (specific students). RLS enforces via `visibilidade` column in `aulas` and `videos` tables.
+```typescript
+export interface Plan {
+  id: string;
+  name: string;
+  description: string;
+  features: string[];
+  colorTheme: 'cyan' | 'gold' | 'purple' | 'rose';
+  imagePlaceholder: string;
+}
+
+export interface Course { id: string; name: string; description: string; imageUrl: string; }
+export interface Teacher { id: string; name: string; role: string; bio: string; photoUrl: string; }
+export interface StudioLocation { id: string; name: string; address: string; phone: string; mapUrl?: string; }
+export interface FAQItem { id: string; question: string; answer: string; }
+```
+
+## Routing
+
+### Route Configuration (`src/App.tsx`)
+
+```tsx
+<Layout>
+  <Routes>
+    <Route path="/" element={<HomePage />} />
+    <Route path="/sobre" element={<AboutPage />} />
+    <Route path="/cursos" element={<CoursesPage />} />
+    <Route path="/planos" element={<PlansPage />} />
+    <Route path="/studios" element={<StudiosPage />} />
+    <Route path="/professores" element={<TeamPage />} />
+    <Route path="/faq" element={<FAQPage />} />
+    <Route path="/ferramentas" element={<ToolsPage />} />
+    <Route path="/contato" element={<ContactPage />} />
+    <Route path="*" element={<Navigate to="/" replace />} />
+  </Routes>
+</Layout>
+```
+
+### Navigation Rules
+
+- **Internal links**: `<Link to="/path">` from `react-router-dom`
+- **External links**: `<a href="..." target="_blank" rel="noopener noreferrer">`
+- **WhatsApp links**: Always use `CONTACT_CONFIG.whatsapp.link`
+
+## Component Patterns
+
+### Typical Page Component
+
+```tsx
+import React from 'react';
+import { COURSES, CONTACT_CONFIG } from '../config/constants';
+import { ArrowRight } from 'lucide-react';
+
+const CoursesPage = () => (
+  <div className="max-w-7xl mx-auto px-4 py-16">
+    <h2 className="text-4xl font-display font-black text-brand-soar mb-4">
+      Nossos <span className="text-brand-primary">Cursos</span>
+    </h2>
+    
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {COURSES.map((course) => (
+        <div key={course.id} className="bg-white rounded-3xl shadow-xl">
+          <img src={course.imageUrl} alt={course.name} />
+          <h3>{course.name}</h3>
+          <p>{course.description}</p>
+          <a href={CONTACT_CONFIG.whatsapp.link} target="_blank">
+            Saiba Mais <ArrowRight />
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+export default CoursesPage;
+```
+
+### Layout Component Structure
+
+```tsx
+// Layout.tsx wraps all pages
+<Layout>
+  <HeaderBanner />
+  <Navbar />
+  {children}  {/* Page content */}
+  <Footer />
+</Layout>
+```
 
 ## Development Workflows
 
-### Run Locally
+### Local Development
 ```bash
-npm install
-npm run dev  # Opens http://localhost:3000
+npm install          # Install dependencies
+npm run dev          # Start dev server (http://localhost:3000)
 ```
 
-### Build for Production
+### Production Build
 ```bash
-npm run build    # Creates optimized dist/ (manual chunks: vendor-react, vendor-supabase, etc.)
-npm run preview  # Test production build locally
+npm run build        # Build optimized bundle
+npm run preview      # Preview production build locally
 ```
 
-### Environment Variables
-Required in `.env.local`:
+### No Environment Variables
+This is a static site - no `.env` file needed.
+
+## Build Optimization
+
+### Manual Code Splitting (`vite.config.ts`)
+
+```typescript
+manualChunks: {
+  'vendor-react': ['react', 'react-dom'],
+  'vendor-router': ['react-router-dom'],
+  'vendor-ui': ['lucide-react'],
+  'components': [/* Layout components */],
+  'public-pages': [/* All pages */]
+}
 ```
-VITE_SUPABASE_URL=https://pdoynmsyyhdkjmivyplg.supabase.co
-VITE_SUPABASE_ANON_KEY=<anon_key>
-GEMINI_API_KEY=<optional>
+
+**Result**: 524KB total (~120KB gzipped)
+
+## Common Tasks
+
+### Add New Page
+1. Create `src/pages/NewPage.tsx`
+2. Add route in `src/App.tsx`
+3. Add link in `Navbar.tsx` or `Footer.tsx`
+
+### Add New Data Type
+1. Define interface in `src/config/types.ts`
+2. Export data array in `src/config/constants.ts`
+3. Import and use: `import { NEW_DATA } from '../config/constants'`
+
+### Update Contact Info
+Edit `CONTACT_CONFIG` in `src/config/constants.ts` - changes reflect everywhere automatically
+
+### Modify Styles
+- **Global**: Edit `src/global.css`
+- **Component**: Use Tailwind utility classes inline
+- **Colors**: Modify `tailwind.config.js` theme
+
+## Styling Guidelines
+
+### Tailwind Utility Classes
+```tsx
+// Consistent spacing
+className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
+
+// Brand colors
+className="text-brand-primary bg-brand-soar border-brand-secondary"
+
+// Responsive design
+className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+
+// Hover effects
+className="hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
 ```
 
-### Code Splitting Strategy (vite.config.ts)
-Manual chunks optimize caching:
-- `vendor-react` - React core (326KB)
-- `vendor-router` - React Router
-- `vendor-supabase` - Supabase SDK
-- `components` - Shared components
-- `public-pages` - Public site pages
-
-**Target: ~120KB gzipped total bundle**
-
-## Key Files Reference
-
-### Essential Reading
-- `supabase/docs/SUPABASE_IMPLEMENTATION.md` - Complete backend architecture
-- `supabase/docs/ESTRUTURA_ADMIN.md` - Admin panel structure
-- `README.md` - Deployment and bundle optimization details
-
-### Typical Edit Targets
-- **Add new page**: Add `<Route>` in `App.tsx` + create page component in `src/pages/`
-- **Modify styles**: `tailwind.config.js` or inline Tailwind classes
-- **Add navigation link**: Use `<Link to="/path">` in components (Navbar, Footer, etc.)
-- **Add Supabase table**: Create migration in `supabase/migrations/`, update `src/types/database.ts`
-- **New admin feature**: Extend `admin.service.ts` method + add page in `src/pages/admin/`
+### Typography Scale
+- Display: `font-display font-black text-4xl` (Montserrat)
+- Body: `font-normal text-base` (Inter)
+- Accent: `font-bold uppercase tracking-wider`
 
 ## Common Pitfalls
 
-1. **Use React Router properly** - Always use `<Link to="/path">` for internal navigation, not `<a href>`
-2. **Check current branch before adding auth code** - auth only exists in `developer` branch
-3. **Never bypass service layer** - components shouldn't import `supabase` directly
-4. **RLS policies are strict** - test with actual user roles, not service_role key
-5. **Storage paths must match RLS policies** - see `arquivos` table `visibilidade` column
-6. **SPA routing configured** - `vercel.json` has rewrites to handle client-side routing
+1. ❌ **Don't use `<a href>` for internal routes** → Use `<Link to="/path">`
+2. ❌ **Don't hardcode WhatsApp/contact** → Import `CONTACT_CONFIG`
+3. ❌ **Don't add backend code** → This is a static site only
+4. ❌ **Don't skip accessibility** → Use semantic HTML + alt text
+5. ❌ **Don't forget mobile responsive** → Test all breakpoints
 
-## Testing Notes
-- No automated tests currently implemented
-- Manual testing workflow: Check `supabase/docs/FRONTEND_EXAMPLES.md` for API usage examples
-- Use Supabase Dashboard SQL Editor to verify RLS policies: `SELECT * FROM <table>` as different roles
+## Testing Checklist
 
-## Contact & Socials
-All configured in `CONTACT_CONFIG` constant:
-- WhatsApp: (35) 99129-5022
-- Instagram: @soarmusicstudios
-- Email: pliniofagundesdefaria@gmail.com
+- [ ] All 9 pages load without errors
+- [ ] Mobile menu works on small screens
+- [ ] All WhatsApp links use `CONTACT_CONFIG.whatsapp.link`
+- [ ] Social links open in new tabs
+- [ ] Images load correctly (Supabase CDN)
+- [ ] Build completes: `npm run build`
+- [ ] No TypeScript errors: `tsc --noEmit`
+- [ ] Responsive on mobile/tablet/desktop
+
+## Deployment
+
+### Vercel (Configured)
+- Push to `main` branch
+- Auto-deploy on push
+- SPA routing handled by `vercel.json`
+
+### Production URL
+- Live site: [soarmusic.vercel.app](https://soarmusic.vercel.app)
+
+## Contact Information
+
+```typescript
+WhatsApp: (35) 99129-5022
+Instagram: @soarmusicstudios
+Facebook: /soarmusicstudios
+YouTube: @PiuGuitar
+Email: pliniofagundesdefaria@gmail.com
+```
 
 ---
 
-**When in doubt**: Check `supabase/docs/` for comprehensive backend documentation. The docs are well-maintained and explain all business logic decisions.
+## Future Roadmap
+
+The complete platform (authentication, admin panel, student/professor portals) will be built from scratch in the future using:
+- Supabase for backend (auth + database + storage)
+- MCP (Model Context Protocol) for AI integration
+- Feature-based architecture for scalability
+
+**Current focus**: Keep site simple, maintainable, and performant.
