@@ -4,8 +4,9 @@
   # 🎵 Soar Music Studios
   
   **Site Institucional MVP**
+
+  🌐 [www.soarmusic.com.br](https://www.soarmusic.com.br)
   
-  [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/OtavioProcopio/soar-music)
   ![React](https://img.shields.io/badge/React-19.2-blue)
   ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue)
   ![Vite](https://img.shields.io/badge/Vite-6.2-purple)
@@ -25,7 +26,7 @@ Site institucional da **Soar Music Studios** - escola de música com unidades no
 - 📱 **Responsivo** - Mobile-first design
 - ⚡ **Performance** - Bundle otimizado (120 KB gzipped)
 - 🎯 **SEO-Ready** - Meta tags e estrutura semântica
-- 🚀 **Deploy Rápido** - Pronto para Vercel/Netlify
+- 🚀 **Deploy** - Hospedado na Vercel
 
 ---
 
@@ -105,17 +106,11 @@ npm run preview  # Preview do build
 
 ---
 
-## 🌐 Deploy
+## 🚀 Deploy
 
-### Vercel (Recomendado)
+O projeto está em produção e hospedado na **Vercel**.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/OtavioProcopio/soar-music)
-
-
-**Via GitHub:**
-1. Conecte seu repositório na [Vercel](https://vercel.com)
-2. Selecione a branch `main`
-3. Deploy automático! ✨
+🔗 Acesse: [www.soarmusic.com.br](https://www.soarmusic.com.br)
 
 
 ## 🎨 Customização
@@ -173,6 +168,6 @@ main                    ← Produção (deploy)
   
   **Desenvolvido com ❤️ por Soar Music Studios**
   
-  [Website](https://soarmusicstudios.com.br) • [Instagram](https://instagram.com/soarmusicstudios) • [YouTube](https://youtube.com/@soarmusicstudios)
+  [Website](https://www.soarmusic.com.br) • [Instagram](https://instagram.com/soarmusicstudios) • [YouTube](https://youtube.com/@soarmusicstudios)
   
 </div>
