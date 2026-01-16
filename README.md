@@ -105,57 +105,18 @@ npm run preview  # Preview do build
 
 ---
 
-## 📦 Build de Produção
-
-### Bundle Otimizado
-
-```
-dist/index.html                         1.88 kB │ gzip:  0.85 kB
-dist/assets/index-*.css                48.01 kB │ gzip:  7.82 kB
-dist/assets/vendor-react-*.js         326.23 kB │ gzip: 98.69 kB
-dist/assets/public-pages-*.js          71.39 kB │ gzip: 10.84 kB
-dist/assets/components-*.js            29.59 kB │ gzip:  6.95 kB
-dist/assets/vendor-ui-*.js              6.84 kB │ gzip:  2.84 kB
-
-Total: ~120 KB gzipped 🚀
-```
-
-### Code Splitting
-
-O projeto implementa **manual chunks** para otimização:
-
-- `vendor-react` - React core (cacheável)
-- `vendor-ui` - Lucide icons + Recharts
-- `components` - Componentes compartilhados
-- `public-pages` - Páginas públicas
-
----
-
 ## 🌐 Deploy
 
 ### Vercel (Recomendado)
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/OtavioProcopio/soar-music)
 
-**Via CLI:**
-```bash
-npm install -g vercel
-vercel login
-vercel --prod
-```
 
 **Via GitHub:**
 1. Conecte seu repositório na [Vercel](https://vercel.com)
 2. Selecione a branch `main`
 3. Deploy automático! ✨
 
-### Outras Plataformas
-
-- **Netlify**: Arraste a pasta `dist/` após `npm run build`
-- **GitHub Pages**: Use `gh-pages` package
-- **Cloudflare Pages**: Conecte via GitHub
-
----
 
 ## 🎨 Customização
 
@@ -198,26 +159,12 @@ main                    ← Produção (deploy)
        └─ developer     ← Desenvolvimento
 ```
 
-### Branches
-
-- `main` - Código de produção
-- `developer` - Base de desenvolvimento (inclui features futuras)
-- `site-institucional` - Versão MVP pública (sem auth/admin)
-
----
-
-## 📄 Licença
-
-Este projeto está sob a licença **MIT**.
-
----
-
 ## 👥 Contato
 
 **Soar Music Studios**
 - 📍 Sul de Minas Gerais (Arceburgo, Guaranésia, Guaxupé, Juruaia)
-- 📧 contato@soarmusicstudios.com.br
-- 📱 WhatsApp: (35) 99999-9999
+- 📧 pliniofagundesdefaria@gmail.com
+- 📱 WhatsApp: (35) 99129-5022
 - 🌐 Instagram: [@soarmusicstudios](https://instagram.com/soarmusicstudios)
 
 ---
