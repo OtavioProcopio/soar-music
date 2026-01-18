@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
@@ -11,7 +10,7 @@ import FAQPage from './pages/FAQPage';
 import ToolsPage from './pages/ToolsPage';
 import ContactPage from './pages/ContactPage';
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <Layout>
       <Routes>
